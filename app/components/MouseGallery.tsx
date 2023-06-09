@@ -1,13 +1,14 @@
 'use client';
 import React, { useRef } from 'react';
 import { transform } from 'typescript';
+import CardSpotlight from './CardSpotlight';
 
 const MouseGallery = () => {
   let imageIndex = 0;
   let step = 0;
   let zIndex = 0;
-  const refCollection: any[] = [];
-  const maxImages: any[] = [];
+  let refCollection: any[] = [];
+  let maxImages: any[] = [];
   const handleMouse = (e: React.MouseEvent) => {
     const { clientX, clientY, movementX, movementY } = e;
     step += Math.abs(movementX) + Math.abs(movementY);
@@ -39,15 +40,44 @@ const MouseGallery = () => {
       imageIndex++;
     }
   };
+  const resetImages = () => {
+    imageIndex = 0;
+    step = 0;
+    zIndex = 0;
+    refCollection.forEach((items) => {
+      items.current.style.display = 'none';
+    });
+    maxImages = [];
+  };
   return (
     <main className="w-full h-full flex flex-col relative justify-center items-center ">
-      <h1 className="font-black text-transparent text-4xl bg-clip-text bg-gradient-to-b mb-2 mt-1 from-white to-neutral-300 px-12">
-        Mouse Gallery
+      <h1 className="flex gap-4 mb-2 mt-2 px-12 justify-center items-center">
+        <span className="text-3xl">🌌</span>
+        <span className="font-black text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-300">
+          Mouse Gallery
+        </span>
       </h1>
       <h1 className="font-normal text-transparent text-lg bg-clip-text bg-gradient-to-b w-2/3 mb-4 text-center from-white to-neutral-300">
         Move your mouse inside the box below to see the effect.
       </h1>
-      <div className=" opacity-80 mouse-gallery-main rounded-lg overflow-hidden w-9/12 h-5/6 bg-gradient-to-b from-green-300 via-blue-300 to-indigo-300 flex justify-center items-center p-[2px]">
+      <CardSpotlight resetImages={resetImages}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+          />
+        </svg>
+        Reset Gallery
+      </CardSpotlight>
+      <div className=" opacity-80 mouse-gallery-main rounded-lg overflow-hidden w-9/12 h-[75%] bg-gradient-to-b from-green-300 via-blue-300 to-indigo-300 flex justify-center items-center p-[2px]">
         {/* Mouse Gallery */}
         <div
           onMouseMove={handleMouse}
@@ -59,7 +89,7 @@ const MouseGallery = () => {
             return (
               <img
                 ref={imageRef}
-                className="absolute w-4/12 hidden"
+                className="absolute w-3/12 hidden"
                 style={{ transform: 'translateX(-75%) translateY(-115%)' }}
                 key={num + 1}
                 src={`/gallery/${num + 1}.jpg`}
