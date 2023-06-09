@@ -1,6 +1,5 @@
 'use client';
 import React, { useRef } from 'react';
-import { transform } from 'typescript';
 import CardSpotlight from './CardSpotlight';
 
 const MouseGallery = () => {
@@ -9,6 +8,7 @@ const MouseGallery = () => {
   let zIndex = 0;
   let refCollection: any[] = [];
   let maxImages: any[] = [];
+
   const handleMouse = (e: React.MouseEvent) => {
     const { clientX, clientY, movementX, movementY } = e;
     step += Math.abs(movementX) + Math.abs(movementY);
@@ -17,29 +17,49 @@ const MouseGallery = () => {
     }
     console.log(clientX);
   };
-  const mouseMovement = (x: Number, y: Number) => {
+
+  const mouseMovement = (x: any, y: any) => {
+    const container = document.getElementById('mouse-gallery-container');
+    if (!container) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const containerLeft = containerRect.left;
+    const containerTop = containerRect.top;
+
     const thisImage = refCollection[imageIndex].current;
+    const imageWidth = thisImage.offsetWidth;
+    const imageHeight = thisImage.offsetHeight;
+
+    // Calculate the position to center the image on the mouse within the container
+    const left = x - containerLeft - imageWidth / 2;
+    const top = y - containerTop - imageHeight / 2;
+
     thisImage.style.display = 'block';
-    thisImage.style.left = x + 'px';
-    thisImage.style.top = y + 'px';
+    thisImage.style.left = left + 'px';
+    thisImage.style.top = top + 'px';
     thisImage.style.zIndex = zIndex;
+
     maxImages.push(thisImage);
     zIndex++;
-    if (maxImages.length - 1 == 5) {
+
+    if (maxImages.length > 5) {
       maxImages[0].style.display = 'none';
       maxImages.shift();
     }
+
     maxImages.forEach((image, index) => {
       zIndex = index;
       image.style.zIndex = zIndex;
     });
-    if (imageIndex == 14) {
+
+    if (imageIndex === 14) {
       imageIndex = 0;
       step = -150;
     } else {
       imageIndex++;
     }
   };
+
   const resetImages = () => {
     imageIndex = 0;
     step = 0;
@@ -49,6 +69,12 @@ const MouseGallery = () => {
     });
     maxImages = [];
   };
+
+  const handleMouseLeave = () => {
+    step = step + 150;
+    console.log('Leave');
+  };
+
   return (
     <main className="w-full h-full flex flex-col relative justify-center items-center ">
       <h1 className="flex gap-4 mb-2 mt-2 px-12 justify-center items-center">
@@ -77,10 +103,12 @@ const MouseGallery = () => {
         </svg>
         Reset Gallery
       </CardSpotlight>
-      <div className=" opacity-80 mouse-gallery-main rounded-lg overflow-hidden w-9/12 h-[75%] bg-gradient-to-b from-green-300 via-blue-300 to-indigo-300 flex justify-center items-center p-[2px]">
+      <div className="opacity-80 mouse-gallery-main rounded-lg overflow-hidden w-9/12 h-[75%] bg-gradient-to-b from-green-300 via-blue-300 to-indigo-300 flex justify-center items-center p-[2px]">
         {/* Mouse Gallery */}
         <div
+          id="mouse-gallery-container"
           onMouseMove={handleMouse}
+          onMouseLeave={handleMouseLeave}
           className="w-full h-full bg-black rounded-lg overflow-hidden relative"
         >
           {Array.from(Array(15).keys()).map((num) => {
@@ -89,8 +117,8 @@ const MouseGallery = () => {
             return (
               <img
                 ref={imageRef}
-                className="absolute w-3/12 hidden"
-                style={{ transform: 'translateX(-75%) translateY(-115%)' }}
+                className="absolute w-3/12 hidden rounded-lg"
+                style={{ transform: 'translateX(-50%) translateY(-50%)' }}
                 key={num + 1}
                 src={`/gallery/${num + 1}.jpg`}
               ></img>
