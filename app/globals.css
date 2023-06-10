@@ -8,6 +8,5 @@ body,
   padding: 0px;
 }
 body {
-  background-color: black;
-  overflow: hidden;
+  @apply bg-gray-950 overflow-hidden;
 }

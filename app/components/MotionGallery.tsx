@@ -1,14 +1,13 @@
 'use client';
-import React, { useRef } from 'react';
+import React, { createRef, useRef } from 'react';
 import CardSpotlight from './CardSpotlight';
-
-const MouseGallery = () => {
+import Image from 'next/image';
+const MotionGallery = () => {
   let imageIndex = 0;
   let step = 0;
   let zIndex = 0;
   let refCollection: any[] = [];
   let maxImages: any[] = [];
-
   const handleMouse = (e: React.MouseEvent) => {
     const { clientX, clientY, movementX, movementY } = e;
     step += Math.abs(movementX) + Math.abs(movementY);
@@ -80,7 +79,7 @@ const MouseGallery = () => {
       <h1 className="flex gap-4 mb-2 mt-2 px-12 justify-center items-center">
         <span className="text-3xl">🌌</span>
         <span className="font-black text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-300">
-          Mouse Gallery
+          Motion Gallery
         </span>
       </h1>
       <h1 className="font-normal text-transparent text-lg bg-clip-text bg-gradient-to-b w-2/3 mb-4 text-center from-white to-neutral-300">
@@ -103,7 +102,7 @@ const MouseGallery = () => {
         </svg>
         Reset Gallery
       </CardSpotlight>
-      <div className="opacity-80 mouse-gallery-main rounded-lg overflow-hidden w-9/12 h-[75%] bg-gradient-to-b from-green-300 via-blue-300 to-indigo-300 flex justify-center items-center p-[2px]">
+      <div className="opacity-80 mouse-gallery-main rounded-lg overflow-hidden w-9/12 h-[75%] bg-gradient-to-b from-slate-100 via-slate-500 to-slate-700  flex justify-center items-center p-[1.5px]">
         {/* Mouse Gallery */}
         <div
           id="mouse-gallery-container"
@@ -112,7 +111,7 @@ const MouseGallery = () => {
           className="w-full h-full bg-black rounded-lg overflow-hidden relative"
         >
           {Array.from(Array(15).keys()).map((num) => {
-            const imageRef = useRef<HTMLImageElement>(null);
+            const imageRef = createRef<HTMLImageElement>();
             refCollection.push(imageRef);
             return (
               <img
@@ -127,10 +126,11 @@ const MouseGallery = () => {
         </div>
       </div>
       {/* Gradient */}
-      <div className="-z-10 w-[400px] h-[500px] absolute bg-blue-500 opacity-25 left-2 blur-[100px] rounded-full"></div>
-      <div className="-z-10 w-[300px] h-[400px] absolute bg-emerald-400 opacity-25 right-2 bottom-1 blur-[100px] rounded-full"></div>
+      {/* <div className="-z-10 w-[400px] h-[500px] absolute bg-slate-500 opacity-25 left-2 blur-[100px] rounded-full"></div>
+      <div className="-z-10 w-[300px] h-[400px] absolute bg-teal-500 opacity-25 right-2 bottom-1 blur-[100px] rounded-full"></div> */}
+      <div className="-z-10 w-[300px] h-[400px] absolute bg-blue-400 opacity-25 top-5 blur-[100px] rounded-full"></div>
     </main>
   );
 };
 
-export default MouseGallery;
+export default MotionGallery;

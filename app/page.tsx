@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import MouseGallery from './components/MouseGallery';
+import MotionGallery from './components/MotionGallery';
 
 export default function Home() {
   return (
     <div className="w-screen h-screen ">
-      <MouseGallery />
+      <MotionGallery />
     </div>
   );
 }
